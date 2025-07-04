@@ -4,8 +4,22 @@ This project template is based on my personal workflow when collaborating with c
 
 - *AI friendly*: It has a clean project setup and instructions for AI agents to understand the project and work as a research assistant; 
 - *Git-centric*: Version control is a **must** in the AI era because AI messes up things. 
-- *Backward compatible*: Collaborating with someone you can't force fancy new tools onto? They can work just as usual, and you can handle all the version control.
+- *Backward compatible*: Collaborating with someone you can't force fancy new tools onto? They can work just as usual, and you can handle all the bells and whistles.
 - *Geared towards academic research*: Unlike software engineering, academic research has smaller teams and is more exploratory by nature. Best practices in the industry may not be suitable here.  
+
+
+## Table of Contents
+
+- [Prerequisites and Setup](#prerequisites-and-setup)
+- [Project Organization](#project-organization)
+    - [Core Structure](#core-structure)
+- [Git](#git)
+    - [Commit](#commit)
+    - [Best Practices](#best-practices-on-commits)
+    - [GitHub Pull-Request Workflow](#github-pull-request-workflow)
+- [AI Instructions](#ai-instructions)
+- [Python Environment Management](#python-environment-management)
+  - [Virtual Environment Location](#virtual-environment-location)
 
 ## Prerequisites and Setup
 
@@ -22,9 +36,7 @@ A project is physically separated into two folders: `MyProject` and `MyProject-S
 
 However, all folders under `MyProject-Share` are soft-linked to `MyProject` (see the setup below), so all files are accessible under `MyProject`, and one can work directly in `MyProject` with access to all folders. 
 
-### Why two folders?
-
-The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically overkill for academic research, and they won't be compatible with coauthor teams who are used to Dropbox.  By maintaining two folders and soft-linking them together, one can use the strengths of Git and Dropbox together while working seamlessly as if there is only one project folder.
+**Why two folders?** The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically overkill for academic research, and they won't be compatible with coauthor teams who are used to Dropbox.  By maintaining two folders and soft-linking them together, one can use the strengths of Git and Dropbox together while working seamlessly as if there is only one project folder.
 
 **Working with someone who does not use Git**: you can also clone the repo into the `MyProject-Share` folder, so they can work just as usual. Because it is shared via Dropbox, you can access all the code and handle Git on their behalf. 
 
@@ -45,7 +57,7 @@ The two-folder structure solves the following dilemma: Dropbox is bad at handlin
 - `Output/` - Generated results and intermediate files
     - This folder is organized with subfolders that have the same names as folders under `Code`.
 
-## Git-Based Workflow
+## Git
 
 We use Git for version control and GitHub for collaboration. Git helps us track changes, work simultaneously without conflicts, and maintain a complete history of our research progress. Tons of tutorials on Git can be easily found online, so here we briefly explain two key concepts --- commit and pull request --- and focus more on best practices in academic research. 
 
@@ -65,7 +77,7 @@ A **commit** is a snapshot of your project at a specific point in time. Each com
 
 When you make changes to files, Git tracks what's different from the last commit. You can then "commit" these changes to create a new snapshot. This allows you to see exactly what changed between different versions.
 
-#### Best Practices on Commits
+### Best Practices
 
 1. **Commit very often**. This is really rule #1, particularly before you call AI to do edits. AI messes things up all the time, and with timely commits you can safely experiment with AI agents with peace of mind knowing anything can be recovered; 
 2. **Descriptive messages**: "Fix typo in table 3" not "fix stuff" so it is easier to trace back changes 
@@ -76,7 +88,7 @@ When you make changes to files, Git tracks what's different from the last commit
 4. **One topic per commit**. Try to make each commit about one topic, rather than a bunch of things all together.
 
 
-### What (not) to commit
+#### What (not) to commit
 
 We commit everything that we want to keep track of the versions. Never commit these types of files:
 
@@ -163,7 +175,6 @@ The project template includes `CLAUDE.md`, instructions for Claude Code tailored
 - When producing outputs, save in `Output/` following the subfolder convention. Do **NOT** save outputs in `Figures/` or `Tables/` unless explicitly requested
 - The project is version controlled with Git. Hence, when adding new analysis, Do **NOT** create a new script per task, but **DO** edit the existing files directly
 - Always execute at the project root rather than `cd` into subfolders
-
 
 ## Python Environment Management
 
