@@ -2,29 +2,31 @@
 
 This project template is based on my personal workflow when collaborating with coauthors. It has the following design philosophy:
 
-- *AI friendly*: It has clean a project set-up and instructions for AI agents to understand the project and work as a reseach assistant; 
-- *Git-centric*: Version control is a **must** in the AI era, because, AI messes up things. 
-- *Backward compatible*: Collaborating with someone you can't force any fancy new tools Git onto? They can work just as usual, and you can handle all the version controls XD
-- *Geared towards academic research*: Different from software engineering, academic research has relatively smaller teams, and is more explorative by nature. Best practices in the industry may not be suitable here.  
+- *AI friendly*: It has a clean project setup and instructions for AI agents to understand the project and work as a research assistant; 
+- *Git-centric*: Version control is a **must** in the AI era because AI messes up things. 
+- *Backward compatible*: Collaborating with someone you can't force fancy new tools onto? They can work just as usual, and you can handle all the version control.
+- *Geared towards academic research*: Unlike software engineering, academic research has smaller teams and is more exploratory by nature. Best practices in the industry may not be suitable here.  
 
-## Prerequisite and Setup
+## Prerequisites and Setup
 
-- To be written by Claude Code.
+The automated project creation script only works on macOS/Linux. However, the structure can be easily replicated on Windows (PRs welcome). 
+
+
 
 ## Project Organization
 
-A project is separated into two folders: `MyProject` and `MyProject-Share`, where 
+A project is physically separated into two folders: `MyProject` and `MyProject-Share`, where: 
 
-- `MyProject` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *Not* shared via cloud services. 
+- `MyProject` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *not* shared via cloud services. 
 - `MyProject-Share` stores data, intermediate outputs, and other relevant documents. It is synced across the group using cloud services like *Dropbox*. 
 
-All folders under `MyProject-Share` are soft-linked to `MyProject` (see the setup below), so all files are accessible under `MyProject`, and one can work directly in `MyProject` with access all folders. 
+However, all folders under `MyProject-Share` are soft-linked to `MyProject` (see the setup below), so all files are accessible under `MyProject`, and one can work directly in `MyProject` with access to all folders. 
 
 ### Why two folders?
 
-The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically an overkill for academic research, and it won't be compatible for coauthor teams who are used to Dropbox.  By maintaining two folders and soft-link them together, one can use the strength of Git and Dropbox together while working seamlessly as if there is only one project folder.
+The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically overkill for academic research, and they won't be compatible with coauthor teams who are used to Dropbox.  By maintaining two folders and soft-linking them together, one can use the strengths of Git and Dropbox together while working seamlessly as if there is only one project folder.
 
-**Working with someone who do not use Git**: you can also clone the repo into the `MyProject-Share` folder, so they can work just as usual. Because it is shared via Dropbox, you can access all the code and handle the Git on their behalf. 
+**Working with someone who does not use Git**: you can also clone the repo into the `MyProject-Share` folder, so they can work just as usual. Because it is shared via Dropbox, you can access all the code and handle Git on their behalf. 
 
 
 ### Core Structure
@@ -45,11 +47,13 @@ The two-folder structure solves the following dilemma: Dropbox is bad at handlin
 
 ## Git-Based Workflow
 
-We use Git for version control and GitHub for collaboration. Git helps us track changes, work simultaneously without conflicts, and maintain a complete history of our research progress. Tons of tutorials on Git can be easily found online, and hence here we briefly explain two key concepts here, commit and pull request, and focus more on the best practice in academic research. 
+We use Git for version control and GitHub for collaboration. Git helps us track changes, work simultaneously without conflicts, and maintain a complete history of our research progress. Tons of tutorials on Git can be easily found online, so here we briefly explain two key concepts --- commit and pull request --- and focus more on best practices in academic research. 
 
-**Why version history in Dropbox/Overleaf is not good enough?**
+**Why isn't version history in Dropbox/Overleaf good enough?**
 
-- TBC by Claude to make some argument for git. 
+- Dropbox and Overleaf version history is limited and doesn't provide meaningful diff comparisons, branching capabilities, or conflict resolution
+- Git provides granular control over what changes are tracked and allows for collaborative workflows through branches and pull requests
+- Git's commit system creates explicit checkpoints with descriptive messages, making it easier to understand the evolution of your research 
 
 ### Basic concept: Commit
 
@@ -63,13 +67,13 @@ When you make changes to files, Git tracks what's different from the last commit
 
 #### Best Practices on Commits
 
-1. **Commit very often**. This is really the rule #1, particularly before you call AI to do edits. AI messes things up all the time, and with timely commits you can safely go YOLO on AI agents with a peace of mind knowing anything can be recovered; 
-2. **Descriptive messages**: "Fix typo in table 3" not "fix stuff" so it is easier to trace back on changes 
-3. **Rule 1 >> Rule 2**: The two rules above intrinsically conflict with each other: when one is required to write detailed message, naturally it adds burden for each commit. When conflicted, follow rule #1. It's better to decipher through cryptic commit messages than no checkpoint to return at all. Several more strategies when you feel lazy at writing messages:
+1. **Commit very often**. This is really rule #1, particularly before you call AI to do edits. AI messes things up all the time, and with timely commits you can safely experiment with AI agents with peace of mind knowing anything can be recovered; 
+2. **Descriptive messages**: "Fix typo in table 3" not "fix stuff" so it is easier to trace back changes 
+3. **Rule 1 >> Rule 2**: The two rules above intrinsically conflict with each other: when one is required to write detailed messages, it naturally adds burden for each commit. When conflicted, follow rule #1. It's better to decipher cryptic commit messages than have no checkpoint to return to at all. Several strategies when you feel lazy about writing messages:
     
     - Use AI to summarize: "Summarize the staged changes and write a commit message"
-    - If one follows PR-based workflow (see below), at the PR stage offers another opportunity to review the changes and summarize in messages
-4. **One topic per commit**. Try to make one commit about one topic, rather than a bunch of things all together.
+    - If one follows PR-based workflow (see below), the PR stage offers another opportunity to review the changes and summarize them in messages
+4. **One topic per commit**. Try to make each commit about one topic, rather than a bunch of things all together.
 
 
 ### What (not) to commit
@@ -84,30 +88,30 @@ We commit everything that we want to keep track of the versions. Never commit th
 
 Add them to `.gitignore` to automatically ignore these files
 
-#### Should we commit figures sand other outputs?
+#### Should we commit figures and other outputs?
 
 The standard recommendation is "we commit code, not the output". *However*, for academic research, the rule of thumb is less clear. 
 
-- Reasons to commit: It is often necessary to keep track the difference in the outputs, particularly as many outputs directly feed into our LaTeX project, and we do need to make sure the draft is completely reproducible without rerunning all the code. 
-- Reasons not to commit: The downside of committing large binary files to Git is that it slows Git down and inefficient at space usage. Git also cannot meaningfully show the differences of binary files so the advantage of `Git` is much less. 
+- Reasons to commit: It is often necessary to keep track of the differences in outputs, particularly as many outputs directly feed into our LaTeX project, and we do need to make sure the draft is completely reproducible without rerunning all the code. 
+- Reasons not to commit: The downside of committing large binary files to Git is that it slows Git down and is inefficient at space usage. Git also cannot meaningfully show the differences of binary files so the advantage of Git is much less. 
 
-The conclusion is one needs to exercise our discretion on when to commit the outputs, and when not. Also, remember anything under the `MyProject-Share` folder is not tracked by Git, while anything else is detected by Git by default. 
+The conclusion is that one needs to exercise discretion on when to commit outputs and when not to. Also, remember anything under the `MyProject-Share` folder is not tracked by Git, while anything else is detected by Git by default. 
 
 #### How about Jupyter Notebook?
 
 Jupyter notebooks are often messy to manage with Git. It is recommended to use VSCode's [Python Interactive Window](https://code.visualstudio.com/docs/python/jupyter-support-py), which allows one to code in .py form but evaluate them interactively cell by cell just as in Jupyter notebooks, and save the output in notebooks.
 
-If Jupyter notebook is used, it is recommended to clean the output first before committing to keed the repo clean. You can always save a copy to the output folder to keep the results. 
+If Jupyter notebook is used, it is recommended to clean the output first before committing to keep the repo clean. You can always save a copy to the output folder to keep the results. 
 
 ### GitHub Pull-Request Workflow
 
 We will use Pull Request (PR) workflows for collaboration. [Here](https://medium.com/%40husnainali593/pull-request-workflow-with-git-a-6-step-guide-e94f753752a3) is an accessible guide on how the PR workflows work. 
 
-Why do we add another layer of complexity on top of commits? The PR workflow is designed to solve the co-editing conflicts: Suppose two coauthors both work on the codebase simultaneously. Now when both push their changes to the central repository (hosted on Github), how do we merge them safely? 
+Why do we add another layer of complexity on top of commits? The PR workflow is designed to solve co-editing conflicts: Suppose two coauthors both work on the codebase simultaneously. When both push their changes to the central repository (hosted on GitHub), how do we merge them safely? 
 
-The solution of PR workflow is as follows: both coauthors branch out, work independently, and merge it back to the main branch. If the change made in the PR is independent from other changes made to the main branch during this period (e.g., by other coauthors), the merge is handled automatically; if one line is changed differently by different authors, the PR offers a chance to reconcile the changes and merge. 
+The solution of the PR workflow is as follows: both coauthors branch out, work independently, and merge back to the main branch. If the changes made in the PR are independent from other changes made to the main branch during this period (e.g., by other coauthors), the merge is handled automatically; if one line is changed differently by different authors, the PR offers a chance to reconcile the changes and merge. 
 
-A typical PR workflow works as follows. The introduction here uses terminal command, though all these can be done with GUI, or simply AI. 
+A typical PR workflow works as follows. The introduction here uses terminal commands, though all these can be done with GUI, or simply with AI. 
 1. **Start new work**: 
    ```bash
    git checkout main
@@ -140,7 +144,7 @@ A typical PR workflow works as follows. The introduction here uses terminal comm
    - Discuss any questions in PR comments
    - Make additional commits if needed
 
-7. **Merge**: Once approved, click "Merge pull request". Recommend to choose `squash and merge` which combines all the updates in a single commit in `main` to keep the timeline clean. 
+7. **Merge**: Once approved, click "Merge pull request". We recommend choosing `squash and merge` which combines all the updates in a single commit in `main` to keep the timeline clean. 
 
 8. **Clean up**:
    ```bash
@@ -154,7 +158,7 @@ A typical PR workflow works as follows. The introduction here uses terminal comm
 The project template includes `CLAUDE.md`, instructions for Claude Code tailored for academic research and the project structure. It contains the following (possibly opinionated) coding style guidance for Claude:
 
 - Code is for academic research and **NOT** meant for production-ready. Therefore, write **concise** and efficient code without safety check (`try...catch...`, `if...else`) unless it's necessary or specifically requested
-- Due to the explorative nature, **DO** write interactive code that can be evaluated line-by-line
+- Due to the exploratory nature, **DO** write interactive code that can be evaluated line-by-line
 - Document only when necessary, but be concise
 - When producing outputs, save in `Output/` following the subfolder convention. Do **NOT** save outputs in `Figures/` or `Tables/` unless explicitly requested
 - The project is version controlled with Git. Hence, when adding new analysis, Do **NOT** create a new script per task, but **DO** edit the existing files directly
@@ -175,11 +179,11 @@ The project uses [`uv`](https://docs.astral.sh/uv/) for Python environment manag
 
 The setup script configures `uv` to place virtual environments in `~/.venvs/MyProject` rather than within the project folder. This keeps the project directory clean and ensures consistent environment paths across different machines.
 
-**A more technical note**: The rationale of putting the `.venvs` folder outside of the project folder is that more often that not, the project folder is also synced via Dropbox across different machines. `uv` uses hard-link/clone for the Python environment, which will be broken by Dropbox sync. This will result in multiple copies of the same package across different project, which is highly space inefficient. Moving it out of Dropbox solves this issue. 
+**A more technical note**: The rationale for putting the `.venvs` folder outside of the project folder is that more often than not, the project folder is also synced via Dropbox across different machines. `uv` uses hard-link/clone for the Python environment, which will be broken by Dropbox sync. This will result in multiple copies of the same package across different projects, which is highly space inefficient. Moving it out of Dropbox solves this issue. 
 
-To automatically use the right virtual space, the setup script automatically creates `.vscode/settings.json` with:
+To automatically use the right virtual environment, the setup script automatically creates `.vscode/settings.json` with:
 - `python.defaultInterpreterPath` - Points to the correct Python interpreter in the virtual environment
 - `terminal.integrated.env.osx` - Sets `UV_PROJECT_ENVIRONMENT` for proper `uv` integration
 - `python.analysis.extraPaths` - Ensures VS Code can find installed packages for IntelliSense
 
-With these setup, by default when you open the project at this folder, it should automatically use the right environment. 
+With this setup, by default when you open the project in this folder, it should automatically use the right environment. 

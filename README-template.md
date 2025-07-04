@@ -2,16 +2,17 @@
 
 Academic research project: ProjectExample
 
-This project is created using 
+This project is created with [ResearchProjectTemplate](https://github.com/FuZhiyu/ResearchProjectTemplate). This readme explains the basic folder structure and setup. For the design principle and best practices, see [ResearchProjectTemplate](https://github.com/FuZhiyu/ResearchProjectTemplate).
+
 
 ## Project Organization
 
-The project is separated into two folders: `ProjectExample` and `ProjectExample-Share`, where 
+The project is physically separated into two folders: `ProjectExample` and `ProjectExample-Share`, where 
 
 - `ProjectExample` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *Not* shared via cloud services. 
 - `ProjectExample-Share` stores data, intermediate outputs, and other relevant documents. It is synced across the group using cloud services like *Dropbox*. 
 
-All folders under `ProjectExample-Share` are soft-linked to `ProjectExample` (see the setup below), so all files are accessible under `ProjectExample`, and one can work directly in `ProjectExample` with access all folders. 
+Nevertheless, all folders under `ProjectExample-Share` are soft-linked to `ProjectExample` (see the setup below), so all files are accessible under `ProjectExample`, and one can work directly in `ProjectExample` with access all folders. 
 
 ### Core Structure
 
@@ -74,6 +75,8 @@ pip install uv
 # Sync dependencies
 export UV_PROJECT_ENVIRONMENT="$HOME/.venvs/$(basename "$PWD")"
 uv sync
+
+# for vscode, set default virtual environment
 cat > .vscode/settings.json << VSCODE_EOF
 {
     "python.defaultInterpreterPath": "\${env:HOME}/.venvs/\${workspaceFolderBasename}/bin/python",

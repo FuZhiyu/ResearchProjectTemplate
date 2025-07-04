@@ -48,7 +48,7 @@ Mirror the Code/ structure with corresponding output folders:
 ## Coding Style
 
 - Code is for academic research and **NOT** meant for production-ready. Therefore, write **concise** and efficient code without safety check (`try...catch...`, `if...else`) unless it's necessary or specifically requested
-- Due to the explorative nature, **DO** write interactive code that can be evaluated line-by-line
+- Due to the exploratory nature, **DO** write interactive code that can be evaluated line-by-line
 - Document only when necessary, but be concise
 - When producing outputs, save in `Output/` following the subfolder convention. Do **NOT** save outputs in `Figures/` or `Tables/` unless explicitly requested
 - The project is version controlled with Git. Hence, when adding new analysis, Do **NOT** create a new script per task, but **DO** edit the existing files directly
