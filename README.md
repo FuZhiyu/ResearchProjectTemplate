@@ -7,12 +7,13 @@ This project template is based on my personal workflow when collaborating with c
 - *Backward compatible*: Collaborating with someone you can't force fancy new tools onto? They can work just as usual, and you can handle all the bells and whistles.
 - *Geared towards academic research*: Unlike software engineering, academic research has smaller teams and is more exploratory by nature. Best practices in the industry may not be suitable here.  
 
+Folder `ProjectExample` gives you a sense of the structure of the project. You can also find the instructions of automated setup under [Prerequisites and Setup](#prerequisites-and-setup).
 
 ## Table of Contents
 
-- [Prerequisites and Setup](#prerequisites-and-setup)
 - [Project Organization](#project-organization)
     - [Core Structure](#core-structure)
+- [Prerequisites and Setup](#prerequisites-and-setup)
 - [Git](#git)
     - [Commit](#commit)
     - [Best Practices](#best-practices-on-commits)
@@ -21,20 +22,15 @@ This project template is based on my personal workflow when collaborating with c
 - [Python Environment Management](#python-environment-management)
   - [Virtual Environment Location](#virtual-environment-location)
 
-## Prerequisites and Setup
-
-The automated project creation script only works on macOS/Linux. However, the structure can be easily replicated on Windows (PRs welcome). 
-
-
 
 ## Project Organization
 
-A project is physically separated into two folders: `MyProject` and `MyProject-Share`, where: 
+A project is "physically" separated into two folders: `MyProject` and `MyProject-Share`, where: 
 
 - `MyProject` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *not* shared via cloud services. 
 - `MyProject-Share` stores data, intermediate outputs, and other relevant documents. It is synced across the group using cloud services like *Dropbox*. 
 
-However, all folders under `MyProject-Share` are soft-linked to `MyProject` (see the setup below), so all files are accessible under `MyProject`, and one can work directly in `MyProject` with access to all folders. 
+**Importantly**, all folders under `MyProject-Share` are symlinked to `MyProject` (see the setup below), so we can just work under `MyProject` as if there is only one folder. 
 
 **Why two folders?** The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically overkill for academic research, and they won't be compatible with coauthor teams who are used to Dropbox.  By maintaining two folders and soft-linking them together, one can use the strengths of Git and Dropbox together while working seamlessly as if there is only one project folder.
 
@@ -56,6 +52,39 @@ However, all folders under `MyProject-Share` are soft-linked to `MyProject` (see
 - `Data/` - Raw and processed datasets. Typically read-only. 
 - `Output/` - Generated results and intermediate files
     - This folder is organized with subfolders that have the same names as folders under `Code`.
+
+## Automated Setup
+
+The automated project creation script only works on macOS/Linux. However, the structure can be easily replicated on Windows (PRs welcome). 
+
+To create a new project using this template:
+
+1. **Clone or download this template repository**:
+   ```bash
+   git clone https://github.com/FuZhiyu/ResearchProjectTemplate.git
+   cd ResearchProjectTemplate
+   ```
+
+2. **Run the project creation script**:
+   ```bash
+   ./create_project.sh YourProjectName
+   ```
+   
+   You can also specify a path:
+   ```bash
+   ./create_project.sh ../MyResearchProject      # Creates in parent directory
+   ./create_project.sh /path/to/MyProject        # Creates at absolute path
+   ```
+
+The script will automatically:
+- Create the two-folder structure (`YourProjectName/` and `YourProjectName-Share/`)
+- Call `setup_mac.sh` to set up the folder
+
+3. **Share with coauthors**:
+   - Share `YourProjectName-Share/` folder via Dropbox
+   - Push repository to GitHub: `cd YourProjectName && git remote add origin <your-repo-url> && git push -u origin main`
+   - Coauthors: clone repo and run `./setup_mac.sh` (see instructions on the project readme file)
+
 
 ## Git
 

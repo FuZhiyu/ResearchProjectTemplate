@@ -5,6 +5,9 @@
 
 set -e  # Exit on any error
 
+# Get the directory where create_project.sh is located (before changing directories)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Check if project name is provided
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <project-name-or-path>"
@@ -86,9 +89,13 @@ if ! command -v brew &> /dev/null; then
     exit 1
 fi
 
-# Install uv via Homebrew
-echo "Installing uv..."
-brew install uv
+# Install uv via Homebrew if not already installed
+if ! command -v uv &> /dev/null; then
+    echo "Installing uv..."
+    brew install uv
+else
+    echo "uv is already installed, skipping installation"
+fi
 
 # Set up UV environment variable for consistent venv location
 export UV_PROJECT_ENVIRONMENT="$HOME/.venvs/$(basename "$PWD")"
@@ -162,9 +169,6 @@ sed -i '' "s/PROJECT_NAME_PLACEHOLDER/$PROJECT_NAME/g" setup_mac.sh
 
 # Make setup script executable
 chmod +x setup_mac.sh
-
-# Get the directory where create_project.sh is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Create README from template
 echo "Creating README..."
@@ -298,10 +302,15 @@ uv.lock
 *.bak
 EOF
 
+# Automatically run setup
 echo ""
-echo "✅ Project template created successfully!"
+echo "🔧 Running automatic setup..."
+./setup_mac.sh
+
 echo ""
-echo "Project structure:"
+echo "✅ Project template created and set up successfully!"
+echo ""
+echo "📁 Project structure:"
 echo "📁 $PROJECT_SHARE_NAME/       - Shared folders (for cloud storage)"
 echo "   ├── Notes/                 - Research notes"
 echo "   ├── Data/                  - Datasets"
@@ -320,7 +329,9 @@ echo "   ├── pyproject.toml         - Python environment"
 echo "   ├── setup_mac.sh           - Setup script"
 echo "   └── README.md              - Setup instructions"
 echo ""
-echo "Next steps:"
-echo "1. cd $PROJECT_NAME"
-echo "2. ./setup_mac.sh"
-echo "3. Start coding in Code/ directory"
+echo "🎉 Next steps for collaboration:"
+echo "1. Share $PROJECT_SHARE_NAME/ folder with coauthors via Dropbox"
+echo "2. Push $PROJECT_NAME/ repository to GitHub and share with coauthors"
+echo "3. Coauthors should clone the repository and run ./setup_mac.sh to set up their environment"
+echo ""
+echo "Ready to start coding in $PROJECT_NAME/Code/ directory!"
