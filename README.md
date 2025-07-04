@@ -1,72 +1,58 @@
-# IntermediaryDemand
+# An Academic Research Project Template in the AI Era
 
-Academic research project analyzing demand of intermediaries.
+This project template is based on my personal workflow when collaborating with coauthors. It has the following design philosophy:
+
+- *AI friendly*: It has clean a project set-up and instructions for AI agents to understand the project and work as a reseach assistant; 
+- *Git-centric*: Version control is a **must** in the AI era, because, AI messes up things. 
+- *Backward compatible*: Collaborating with someone you can't force any fancy new tools Git onto? They can work just as usual, and you can handle all the version controls XD
+- *Geared towards academic research*: Different from software engineering, academic research has relatively smaller teams, and is more explorative by nature. Best practices in the industry may not be suitable here.  
+
+## Prerequisite and Setup
+
+- To be written by Claude Code.
 
 ## Project Organization
 
-The project is separated into two folders: `IntermediaryDemand` and `IntermediaryDemand-Share`, where 
+A project is separated into two folders: `MyProject` and `MyProject-Share`, where 
 
-- `IntermediaryDemand` stores the codebase, final figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git*. 
-- `IntermediaryDemand-Share` stores data and intermediate outputs. It is synced across the group using *Dropbox*. 
+- `MyProject` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *Not* shared via cloud services. 
+- `MyProject-Share` stores data, intermediate outputs, and other relevant documents. It is synced across the group using cloud services like *Dropbox*. 
 
-All folders under `IntermediaryDemand` are soft-linked to `IntermediaryDemand-Share` (see the setup below), so all files are accessible under `IntermediaryDemand`, and we can work directly in `IntermediaryDemand`.
+All folders under `MyProject-Share` are soft-linked to `MyProject` (see the setup below), so all files are accessible under `MyProject`, and one can work directly in `MyProject` with access all folders. 
+
+### Why two folders?
+
+The two-folder structure solves the following dilemma: Dropbox is bad at handling simultaneous-editing conflict (and lacks meaningful version control), while Git does not handle big files well. More sophisticated tools exist but they are typically an overkill for academic research, and it won't be compatible for coauthor teams who are used to Dropbox.  By maintaining two folders and soft-link them together, one can use the strength of Git and Dropbox together while working seamlessly as if there is only one project folder.
+
+**Working with someone who do not use Git**: you can also clone the repo into the `MyProject-Share` folder, so they can work just as usual. Because it is shared via Dropbox, you can access all the code and handle the Git on their behalf. 
 
 
 ### Core Structure
 
-#### In the Git Repo (`IntermediaryDemand`)
+#### In the Git Repo (`MyProject`)
 - `Code/` - All analysis scripts and implementation
    - The subfolders are organized around different tasks, e.g., `DataCleaning`.
-- `Figures/` - Final presentable charts, plots, and visualizations that we want to track the version with `git`
-- `Tables/` - Final presentable result tables and summary statistics that we want to track with `git`
+- `Figures/` - Final presentable charts, plots, and visualizations that we want to track the version with git
+- `Tables/` - Final presentable result tables and summary statistics that we want to track with git
 - `Paper/` - The LaTeX folder containing the draft
 - `Slides/` - The LaTeX folder containing slides
 
-#### In the Dropbox (`IntermediaryDemand-Share`)
+#### In the Dropbox (`MyProject-Share`)
 - `Notes/` - Research notes and documentation
 - `Data/` - Raw and processed datasets. Typically read-only. 
 - `Output/` - Generated results and intermediate files
     - This folder is organized with subfolders that have the same names as folders under `Code`.
     - Within each subfolder, it is recommended (but not required) that the results are organized by folders named after the scripts that generate them.
 
-## Setup Instructions
+## Git-Based Workflow
 
-### Prerequisites
+We use Git for version control and GitHub for collaboration. Git helps us track changes, work simultaneously without conflicts, and maintain a complete history of our research progress. Tons of tutorials on Git can be easily found online, and hence here we briefly explain two key concepts here, commit and pull request, and focus more on the best practice in academic research. 
 
-- **macOS**: Homebrew installed ([https://brew.sh](https://brew.sh))
-- **Git**: For cloning the repository
-- **VSCode/Cursor**: Not necessary but highly recommended
+**Why version history in Dropbox/Overleaf is not good enough?**
 
-### Installation
+- TBC by Claude to make some argument for git. 
 
-1. **Clone the repository** in the same parent directory as your `IntermediaryDemand-Share` folder:
-   ```bash
-   # Navigate to the parent directory containing IntermediaryDemand-Share
-   cd /path/to/parent/directory
-   
-   # Clone the repository
-   git clone https://github.com/FuZhiyu/IntermediaryDemand.git
-   cd IntermediaryDemand
-   ```
-
-2. **Make the setup script executable and run it** (macOS only):
-   ```bash
-   chmod +x setup_mac.sh
-   ./setup_mac.sh
-   ```
-
-   This script will:
-   - Install `uv` (Python package manager) via Homebrew
-   - Set up UV environment variable for consistent virtual environment location
-   - Sync the Python project dependencies
-   - Create symbolic links to `Notes`, `Data`, and `Output` folders from `../IntermediaryDemand-Share/`
-   - Configure VS Code settings for proper Python interpreter and environment paths
-
-## Git
-
-This project uses Git for version control and GitHub for collaboration. Git helps us track changes, work simultaneously without conflicts, and maintain a complete history of our research progress.
-
-### Commit
+### Basic concept: Commit
 
 A **commit** is a snapshot of your project at a specific point in time. Each commit has:
 - A message describing what changed
@@ -76,11 +62,20 @@ A **commit** is a snapshot of your project at a specific point in time. Each com
 
 When you make changes to files, Git tracks what's different from the last commit. You can then "commit" these changes to create a new snapshot. This allows you to see exactly what changed between different versions.
 
-**Commit very often**, particularly before you call AI to do edits. AIs mess up things all the time, with a commit, we can make sure 
+#### Best Practices on Commits
+
+1. **Commit very often**. This is really the rule #1, particularly before you call AI to do edits. AI messes things up all the time, and with timely commits you can safely go YOLO on AI agents with a peace of mind knowing anything can be recovered; 
+2. **Descriptive messages**: "Fix typo in table 3" not "fix stuff" so it is easier to trace back on changes 
+3. **Rule 1 >> Rule 2**: The two rules above intrinsically conflict with each other: when one is required to write detailed message, naturally it adds burden for each commit. When conflicted, follow rule #1. It's better to decipher through cryptic commit messages than no checkpoint to return at all. Several more strategies when you feel lazy at writing messages:
+    
+    - Use AI to summarize: "Summarize the staged changes and write a commit message"
+    - If one follows PR-based workflow (see below), at the PR stage offers another opportunity to review the changes and summarize in messages
+4. **One topic per commit**. Try to make one commit about one topic, rather than a bunch of things all together.
+
 
 ### What (not) to commit
 
-**Never commit these types of files:**
+We commit everything that we want to keep track of the versions. Never commit these types of files:
 
 - **Data files** (`.csv`, `.xlsx`, `.parquet`, etc.) - These are often large and change frequently
 - **Personal files** (notes, temporary files, IDE settings)
@@ -88,27 +83,37 @@ When you make changes to files, Git tracks what's different from the last commit
 - **Large files** (>100MB) - Git repositories have size limits
 - **Auxiliary files** (`.aux`, `.log`, `.tmp`, cache files)
 
-**Use `.gitignore` to automatically ignore these files:**
+Add them to `.gitignore` to automatically ignore these files
 
-### Figures and other outputs
+#### Should we commit figures sand other outputs?
 
-The typical recommendation is we commit code, not the output. However, for research is often necessary to keep track the difference in the outputs, particularly as many outputs directly feed into our LaTeX project, and we do need to make sure the draft is completely reproducible without running the code. Hence we just need to exercise our discretion on when to commit the outputs and when not. Remember anything under the `IntermediaryDemand-Share` folder is not tracked by Git, while anything else is detected by Git by default. When producing results, you can decide where to put them based on the question "is it worth tracking?"
+The standard recommendation is "we commit code, not the output". *However*, for academic research, the rule of thumb is less clear. 
 
-### Jupyter
+- Reasons to commit: It is often necessary to keep track the difference in the outputs, particularly as many outputs directly feed into our LaTeX project, and we do need to make sure the draft is completely reproducible without rerunning all the code. 
+- Reasons not to commit: The downside of committing large binary files to Git is that it slows Git down and inefficient at space usage. Git also cannot meaningfully show the differences of binary files so the advantage of `Git` is much less. 
 
-Jupyter notebooks are often messy to manage with Git. Preferably (though not required) we use VSCode's [Python Interactive Window](https://code.visualstudio.com/docs/python/jupyter-support-py), which allows you to code in .py form but evaluate them interactively cell by cell just as in Jupyter notebooks. When using Jupyter notebooks, it is recommended to clean the output first before committing. You can always save a copy to the output folder to keep the results. 
+The conclusion is one needs to exercise our discretion on when to commit the outputs, and when not. Also, remember anything under the `MyProject-Share` folder is not tracked by Git, while anything else is detected by Git by default. 
 
-### GitHub PR Workflow
+#### How about Jupyter Notebook?
+
+Jupyter notebooks are often messy to manage with Git. It is recommended to use VSCode's [Python Interactive Window](https://code.visualstudio.com/docs/python/jupyter-support-py), which allows one to code in .py form but evaluate them interactively cell by cell just as in Jupyter notebooks, and save the output in notebooks.
+
+If Jupyter notebook is used, it is recommended to clean the output first before committing to keed the repo clean. You can always save a copy to the output folder to keep the results. 
+
+### GitHub Pull-Request Workflow
 
 We will use Pull Request (PR) workflows for collaboration. [Here](https://medium.com/%40husnainali593/pull-request-workflow-with-git-a-6-step-guide-e94f753752a3) is an accessible guide on how the PR workflows work. 
 
-Below is a step-by-step guide on the PR workflow. All these can be done (sometimes more easily, sometimes more cumbersome) with VSCode GUI. The key principle is that for any non-trivial changes, do not commit directly on `main`. Rather, branch out, work on it, and then merge back. This practice helps to minimize conflict across team members, and also keep the main timeline clean. 
+Why do we add another layer of complexity on top of commits? The PR workflow is designed to solve the co-editing conflicts: Suppose two coauthors both work on the codebase simultaneously. Now when both push their changes to the central repository (hosted on Github), how do we merge them safely? 
 
+The solution of PR workflow is as follows: both coauthors branch out, work independently, and merge it back to the main branch. If the change made in the PR is independent from other changes made to the main branch during this period (e.g., by other coauthors), the merge is handled automatically; if one line is changed differently by different authors, the PR offers a chance to reconcile the changes and merge. 
+
+A typical PR workflow works as follows. The introduction here uses terminal command, though all these can be done with GUI, or simply AI. 
 1. **Start new work**: 
    ```bash
    git checkout main
    git pull origin main  # Get latest changes
-   git checkout -b feature/julie-regression-analysis
+   git checkout -b feature/julie-regression-analysis # branch out 
    ```
 
 2. **Do your work**: Edit files, run analysis, create figures
@@ -145,15 +150,11 @@ Below is a step-by-step guide on the PR workflow. All these can be done (sometim
    git branch -d feature/julie-regression-analysis  # Delete old branch
    ```
 
-### Best Practices
+## AI Instructions
 
-- **Commit very often**: Small, frequent commits are better than large ones. 
-- **Descriptive messages**: "Fix typo in table 3" not "fix stuff". It is of course more workload if we want to both commit often while writing descriptive messages all the time. When lazy, better to commit often with unclear messages than infrequent commits. 
-- **One feature per branch**: Don't mix unrelated changes
-- **Pull before you push**: Always `git pull` before starting new work
+The project template includes `CLAUDE.md`, instructions for Claude Code tailored for academic research and the project structure. 
 
-
-## Environment Management
+## Python Environment Management
 
 The project uses [`uv`](https://docs.astral.sh/uv/) for Python environment management, which is installed by the setup script.
 
@@ -165,51 +166,13 @@ The project uses [`uv`](https://docs.astral.sh/uv/) for Python environment manag
 
 ### Virtual Environment Location
 
-The setup script configures `uv` to place virtual environments in `~/.venvs/IntermediaryDemand` rather than within the project folder. This keeps the project directory clean and ensures consistent environment paths across different machines.
+The setup script configures `uv` to place virtual environments in `~/.venvs/MyProject` rather than within the project folder. This keeps the project directory clean and ensures consistent environment paths across different machines.
 
-### VS Code Integration
+**A more technical note**: The rationale of putting the `.venvs` folder outside of the project folder is that more often that not, the project folder is also synced via Dropbox across different machines. `uv` uses hard-link/clone for the Python environment, which will be broken by Dropbox sync. This will result in multiple copies of the same package across different project, which is highly space inefficient. Moving it out of Dropbox solves this issue. 
 
-The setup script automatically creates `.vscode/settings.json` with:
+To automatically use the right virtual space, the setup script automatically creates `.vscode/settings.json` with:
 - `python.defaultInterpreterPath` - Points to the correct Python interpreter in the virtual environment
 - `terminal.integrated.env.osx` - Sets `UV_PROJECT_ENVIRONMENT` for proper `uv` integration
 - `python.analysis.extraPaths` - Ensures VS Code can find installed packages for IntelliSense
 
 With these setup, by default when you open the project at this folder, it should automatically use the right environment. 
-
-### Manual Setup (Alternative)
-
-If you prefer manual setup or are not on macOS:
-
-#### Python Environment
-```bash
-# Install uv (if not using macOS setup script)
-pip install uv
-
-# Sync dependencies
-uv sync
-```
-
-#### Julia Environment
-```bash
-# Start Julia in project directory
-julia --project=.
-
-# In Julia REPL, activate and instantiate
-] activate .
-] instantiate
-```
-
-#### Create Symbolic Links
-```bash
-# Create links to shared folders (adjust paths as needed)
-ln -s ../IntermediaryDemand-Share/Notes ./Notes
-ln -s ../IntermediaryDemand-Share/Data ./Data
-ln -s ../IntermediaryDemand-Share/Output ./Output
-```
-
-### Verification
-
-After setup, you should have:
-- Python environment ready with `uv sync`
-- Julia environment activated with required packages
-- Symbolic links to shared `Notes`, `Data`, and `Output` folders
