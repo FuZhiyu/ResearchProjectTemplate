@@ -1,18 +1,19 @@
 # ProjectExample
 
-Academic research project: ProjectExample
+Academic research project created with [ResearchProjectTemplate](https://github.com/FuZhiyu/ResearchProjectTemplate).
 
-This project is created with [ResearchProjectTemplate](https://github.com/FuZhiyu/ResearchProjectTemplate). This readme explains the basic folder structure and setup. For design principles and best practices, see the [ResearchProjectTemplate documentation](https://github.com/FuZhiyu/ResearchProjectTemplate).
+For design principles and best practices, see the [template documentation](https://github.com/FuZhiyu/ResearchProjectTemplate).
 
 
 ## Project Organization
 
-The project is physically separated into two folders: `ProjectExample` and `ProjectExample-Share`, where 
+Projects use a two-folder structure:
 
-- `ProjectExample` stores the codebase, publication-ready figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git* and *not* shared via cloud services. 
-- `ProjectExample-Share` stores data, intermediate outputs, and other relevant documents. It is synced across the group using cloud services like *Dropbox*. 
+- `ProjectExample/` - Git repository containing code, final figures/tables, and LaTeX documents
+- `ProjectExample-Share/` - Dropbox-synced folder with data, notes, and intermediate outputs
 
-However, all folders under `ProjectExample-Share` are soft-linked to `ProjectExample` (see the setup below), so all files are accessible under `ProjectExample`, and one can work directly in `ProjectExample` with access to all folders. 
+Folders from `ProjectExample-Share/` are symlinked into `ProjectExample/`, so you work in one place with access to everything.
+
 
 ### Core Structure
 
