@@ -163,122 +163,33 @@ sed -i '' "s/PROJECT_NAME_PLACEHOLDER/$PROJECT_NAME/g" setup_mac.sh
 # Make setup script executable
 chmod +x setup_mac.sh
 
-# Create README
+# Get the directory where create_project.sh is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Create README from template
 echo "Creating README..."
-cat > README.md << EOF
-# $PROJECT_NAME
+if [ -f "$SCRIPT_DIR/README-template.md" ]; then
+    cp "$SCRIPT_DIR/README-template.md" README.md
+    # Replace ProjectExample with actual project names
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" README.md
+    sed -i '' "s/ProjectExample-Share/$PROJECT_SHARE_NAME/g" README.md
+else
+    echo "Warning: README-template.md not found, creating basic README"
+    echo "# $PROJECT_NAME" > README.md
+    echo "" >> README.md
+    echo "Academic research project: $PROJECT_NAME" >> README.md
+fi
 
-Academic research project: $PROJECT_NAME
-
-## Project Organization
-
-The project is separated into two folders: \`$PROJECT_NAME\` and \`$PROJECT_SHARE_NAME\`, where:
-
-- \`$PROJECT_NAME\` stores the codebase, final figure and table outputs that go into papers and slides, and LaTeX projects. It is version-controlled using *Git*.
-- \`$PROJECT_SHARE_NAME\` stores data and intermediate outputs. It is synced across the group using *Dropbox* or other cloud storage.
-
-All folders under \`$PROJECT_SHARE_NAME\` are soft-linked to \`$PROJECT_NAME\` (see the setup below), so all files are accessible under \`$PROJECT_NAME\`, and we can work directly in \`$PROJECT_NAME\`.
-
-### Core Structure
-
-#### In the Git Repo (\`$PROJECT_NAME\`)
-- \`Code/\` - All analysis scripts and implementation
-- \`Figures/\` - Final presentable charts, plots, and visualizations that we want to track the version with \`git\`
-- \`Tables/\` - Final presentable result tables and summary statistics that we want to track with \`git\`
-- \`Paper/\` - The LaTeX folder containing the draft
-- \`Slides/\` - The LaTeX folder containing slides
-
-#### In the Cloud Storage (\`$PROJECT_SHARE_NAME\`)
-- \`Notes/\` - Research notes and documentation
-- \`Data/\` - Raw and processed datasets. Typically read-only.
-- \`Output/\` - Generated results and intermediate files
-
-## Setup Instructions
-
-### Prerequisites
-
-- **macOS**: Homebrew installed ([https://brew.sh](https://brew.sh))
-- **Git**: For cloning the repository
-- **VSCode/Cursor**: Not necessary but highly recommended
-
-### Installation
-
-1. **Clone the repository** in the same parent directory as your \`$PROJECT_SHARE_NAME\` folder:
-   \`\`\`bash
-   # Navigate to the parent directory containing $PROJECT_SHARE_NAME
-   cd /path/to/parent/directory
-   
-   # Clone the repository (or copy the project folder)
-   cd $PROJECT_NAME
-   \`\`\`
-
-2. **Make the setup script executable and run it** (macOS only):
-   \`\`\`bash
-   chmod +x setup_mac.sh
-   ./setup_mac.sh
-   \`\`\`
-
-   This script will:
-   - Install \`uv\` (Python package manager) via Homebrew
-   - Set up UV environment variable for consistent virtual environment location
-   - Sync the Python project dependencies
-   - Create symbolic links to folders from \`../$PROJECT_SHARE_NAME/\`
-   - Configure VS Code settings for proper Python interpreter and environment paths
-   - Initialize a git repository and create the initial commit
-
-## Environment Management
-
-The project uses [\`uv\`](https://docs.astral.sh/uv/) for Python environment management, which is installed by the setup script.
-
-**Quick uv commands:**
-- \`uv sync\` - Install all required dependencies from \`pyproject.toml\`
-- \`uv run <command>\` - Run any command with project environment (e.g., \`uv run python script.py\`, \`uv run jupyter notebook\`)
-- \`uv add package\` - Add a new dependency
-- \`uv remove package\` - Remove a dependency
-
-### Virtual Environment Location
-
-The setup script configures \`uv\` to place virtual environments in \`~/.venvs/$PROJECT_NAME\` rather than within the project folder. This keeps the project directory clean and ensures consistent environment paths across different machines.
-
-### VS Code Integration
-
-The setup script automatically creates \`.vscode/settings.json\` with:
-- \`python.defaultInterpreterPath\` - Points to the correct Python interpreter in the virtual environment
-- \`terminal.integrated.env.osx\` - Sets \`UV_PROJECT_ENVIRONMENT\` for proper \`uv\` integration
-- \`python.analysis.extraPaths\` - Ensures VS Code can find installed packages for IntelliSense
-
-### Manual Setup (Alternative)
-
-If you prefer manual setup or are not on macOS:
-
-#### Python Environment
-\`\`\`bash
-# Install uv (if not using macOS setup script)
-pip install uv
-
-# Sync dependencies
-uv sync
-\`\`\`
-
-#### Create Symbolic Links
-\`\`\`bash
-# Create links to all folders in the shared directory
-for folder in ../$PROJECT_SHARE_NAME/*/; do
-    ln -s "\$folder" "./\$(basename "\$folder")"
-done
-\`\`\`
-
-### Verification
-
-After setup, you should have:
-- Python environment ready with \`uv sync\`
-- Symbolic links to shared \`Notes\`, \`Data\`, and \`Output\` folders
-- Local \`Code\`, \`Figures\`, \`Tables\`, \`Paper\`, and \`Slides\` folders in the repository
-
-### Usage
-
-- **Python**: Use \`uv run\` to execute Python scripts with the project environment
-EOF
+# Create CLAUDE.md from template
+echo "Creating CLAUDE.md..."
+if [ -f "$SCRIPT_DIR/CLAUDE-template.md" ]; then
+    cp "$SCRIPT_DIR/CLAUDE-template.md" CLAUDE.md
+    # Replace ProjectExample with actual project names
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" CLAUDE.md
+    sed -i '' "s/ProjectExample-Share/$PROJECT_SHARE_NAME/g" CLAUDE.md
+else
+    echo "Warning: CLAUDE-template.md not found, skipping CLAUDE.md creation"
+fi
 
 # Create initial symlinks to shared folders
 echo "Creating initial symlinks..."

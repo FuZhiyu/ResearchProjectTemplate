@@ -42,7 +42,6 @@ The two-folder structure solves the following dilemma: Dropbox is bad at handlin
 - `Data/` - Raw and processed datasets. Typically read-only. 
 - `Output/` - Generated results and intermediate files
     - This folder is organized with subfolders that have the same names as folders under `Code`.
-    - Within each subfolder, it is recommended (but not required) that the results are organized by folders named after the scripts that generate them.
 
 ## Git-Based Workflow
 
@@ -152,7 +151,15 @@ A typical PR workflow works as follows. The introduction here uses terminal comm
 
 ## AI Instructions
 
-The project template includes `CLAUDE.md`, instructions for Claude Code tailored for academic research and the project structure. 
+The project template includes `CLAUDE.md`, instructions for Claude Code tailored for academic research and the project structure. It contains the following (possibly opinionated) coding style guidance for Claude:
+
+- Code is for academic research and **NOT** meant for production-ready. Therefore, write **concise** and efficient code without safety check (`try...catch...`, `if...else`) unless it's necessary or specifically requested
+- Due to the explorative nature, **DO** write interactive code that can be evaluated line-by-line
+- Document only when necessary, but be concise
+- When producing outputs, save in `Output/` following the subfolder convention. Do **NOT** save outputs in `Figures/` or `Tables/` unless explicitly requested
+- The project is version controlled with Git. Hence, when adding new analysis, Do **NOT** create a new script per task, but **DO** edit the existing files directly
+- Always execute at the project root rather than `cd` into subfolders
+
 
 ## Python Environment Management
 
