@@ -1,12 +1,12 @@
 # Academic Research Project Template
 
-A project template and workflow designed for academic research collaboration, centered around Git and optimized for AI assistance.
+A project setup and workflow designed for academic research collaboration, centered around Git and optimized for AI assistance.
 
 **Key Features:**
 - Git repo + Dropbox share, symlinked into one folder
 - Git-centric: A **must** to use AI, because AI messes up things. 
-- AI-friendly setup with included default instructions for LLM
 - Compatible with traditional workflows and no-Git coauthors
+- AI-friendly setup with included default instructions for LLM
 
 See `ProjectExample/` for structure reference and [Setup](#automated-setup) for automated setup.
 
