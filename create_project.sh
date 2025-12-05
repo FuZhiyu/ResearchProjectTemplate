@@ -48,6 +48,16 @@ cd "$PROJECT_SHARE_NAME"
 echo "Creating shared directories..."
 mkdir -p Notes Data Output
 
+# Copy .env to Notes/
+if [ -f "$SCRIPT_DIR/ProjectExample/Notes/.env" ]; then
+    cp "$SCRIPT_DIR/ProjectExample/Notes/.env" Notes/.env
+    # Replace ProjectExample with actual project name
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" Notes/.env
+    echo "Copied .env template to Notes/"
+else
+    echo "Warning: ProjectExample/Notes/.env not found"
+fi
+
 echo "Created shared folder structure in $PROJECT_SHARE_NAME"
 
 # Create code repository
@@ -58,9 +68,16 @@ cd "$PROJECT_NAME"
 echo "Creating code project directories..."
 mkdir -p Code Figures Tables Paper Slides
 
-# Create Python pyproject.toml
+# Create Python pyproject.toml from template
 echo "Creating Python environment..."
-cat > pyproject.toml << EOF
+if [ -f "$SCRIPT_DIR/ProjectExample/pyproject.toml" ]; then
+    cp "$SCRIPT_DIR/ProjectExample/pyproject.toml" pyproject.toml
+    # Replace ProjectExample with actual project names
+    sed -i '' "s/projectexample/$(echo $PROJECT_NAME | tr '[:upper:]' '[:lower:]' | tr ' ' '-')/g" pyproject.toml
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" pyproject.toml
+else
+    echo "Warning: ProjectExample/pyproject.toml not found, creating basic pyproject.toml"
+    cat > pyproject.toml << EOF
 [project]
 name = "$(echo $PROJECT_NAME | tr '[:upper:]' '[:lower:]' | tr ' ' '-')"
 version = "0.1.0"
@@ -69,10 +86,17 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
 EOF
+fi
 
-# Create setup script
+# Create setup script from template
 echo "Creating setup script..."
-cat > setup_mac.sh << 'EOF'
+if [ -f "$SCRIPT_DIR/ProjectExample/setup_mac.sh" ]; then
+    cp "$SCRIPT_DIR/ProjectExample/setup_mac.sh" setup_mac.sh
+    # Replace ProjectExample with actual project names
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" setup_mac.sh
+else
+    echo "Warning: ProjectExample/setup_mac.sh not found, creating basic setup_mac.sh"
+    cat > setup_mac.sh << 'EOF'
 #!/bin/bash
 
 # Setup script for Mac users
@@ -152,7 +176,7 @@ echo "VS Code settings configured at .vscode/settings.json"
 if [ ! -d .git ]; then
     echo "Initializing git repository..."
     git init
-    
+
     # Add all files and make initial commit
     git add .
     git commit -m "Initial commit: $PROJECT_NAME research project setup"
@@ -163,9 +187,9 @@ fi
 
 echo "Setup complete!"
 EOF
-
-# Replace placeholder with actual project name
-sed -i '' "s/PROJECT_NAME_PLACEHOLDER/$PROJECT_NAME/g" setup_mac.sh
+    # Replace placeholder with actual project name
+    sed -i '' "s/PROJECT_NAME_PLACEHOLDER/$PROJECT_NAME/g" setup_mac.sh
+fi
 
 # Make setup script executable
 chmod +x setup_mac.sh
@@ -195,6 +219,39 @@ else
     echo "Warning: CLAUDE-template.md not found, skipping CLAUDE.md creation"
 fi
 
+# Copy .claude folder from ProjectExample
+echo "Copying .claude configuration..."
+if [ -d "$SCRIPT_DIR/ProjectExample/.claude" ]; then
+    cp -r "$SCRIPT_DIR/ProjectExample/.claude" .claude
+    # Replace ProjectExample with actual project names in all .claude files
+    find .claude -type f \( -name "*.md" -o -name "*.json" \) -exec sed -i '' "s/ProjectExample/$PROJECT_NAME/g" {} \;
+    find .claude -type f \( -name "*.md" -o -name "*.json" \) -exec sed -i '' "s/ProjectExample-Share/$PROJECT_SHARE_NAME/g" {} \;
+    echo "Copied .claude configuration with agents and skills"
+else
+    echo "Warning: ProjectExample/.claude not found, skipping .claude configuration"
+fi
+
+# Create AGENTS.md symlink to CLAUDE.md for Codex compatibility
+echo "Creating AGENTS.md symlink..."
+if [ -f "CLAUDE.md" ]; then
+    ln -s CLAUDE.md AGENTS.md
+    echo "Created AGENTS.md -> CLAUDE.md symlink"
+else
+    echo "Warning: CLAUDE.md not found, skipping AGENTS.md symlink"
+fi
+
+# Copy .mcp.json configuration
+echo "Copying .mcp.json configuration..."
+if [ -f "$SCRIPT_DIR/ProjectExample/.mcp.json" ]; then
+    cp "$SCRIPT_DIR/ProjectExample/.mcp.json" .mcp.json
+    # Replace ProjectExample with actual project names
+    sed -i '' "s/ProjectExample/$PROJECT_NAME/g" .mcp.json
+    sed -i '' "s/ProjectExample-Share/$PROJECT_SHARE_NAME/g" .mcp.json
+    echo "Copied .mcp.json configuration"
+else
+    echo "Warning: ProjectExample/.mcp.json not found, skipping .mcp.json configuration"
+fi
+
 # Create initial symlinks to shared folders
 echo "Creating initial symlinks..."
 SOURCE_DIR="../$PROJECT_SHARE_NAME"
@@ -214,9 +271,13 @@ fi
 echo "Initializing git repository..."
 git init
 
-# Create .gitignore
+# Create .gitignore from template
 echo "Creating .gitignore..."
-cat > .gitignore << EOF
+if [ -f "$SCRIPT_DIR/ProjectExample/.gitignore" ]; then
+    cp "$SCRIPT_DIR/ProjectExample/.gitignore" .gitignore
+else
+    echo "Warning: ProjectExample/.gitignore not found, creating basic .gitignore"
+    cat > .gitignore << EOF
 # Python
 __pycache__/
 *.py[cod]
@@ -301,6 +362,7 @@ uv.lock
 *.tmp
 *.bak
 EOF
+fi
 
 # Automatically run setup
 echo ""

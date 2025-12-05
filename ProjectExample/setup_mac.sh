@@ -25,9 +25,51 @@ fi
 # Set up UV environment variable for consistent venv location
 export UV_PROJECT_ENVIRONMENT="$HOME/.venvs/$(basename "$PWD")"
 
-# Sync the uv Python project
-echo "Syncing uv Python project..."
+# Install dependencies
+echo "Installing Python packages..."
+
+# Common data analysis packages
+echo "Installing data analysis packages..."
+uv add jupyter pandas matplotlib polars pyarrow
+
+# Add zotero-mcp git source to pyproject.toml before installing dependencies
+if ! grep -q "^zotero-mcp.*git" pyproject.toml; then
+    # Check if [tool.uv.sources] section exists
+    if grep -q "\[tool.uv.sources\]" pyproject.toml; then
+        # Uncomment the zotero-mcp line (remove leading # and spaces)
+        sed -i '' 's/^# *zotero-mcp = { git.*/zotero-mcp = { git = "https:\/\/github.com\/54yyyu\/zotero-mcp.git" }/' pyproject.toml
+    else
+        # Section doesn't exist, add it
+        echo "" >> pyproject.toml
+        echo "[tool.uv.sources]" >> pyproject.toml
+        echo "zotero-mcp = { git = \"https://github.com/54yyyu/zotero-mcp.git\" }" >> pyproject.toml
+    fi
+fi
+
+# Claude skill dependencies
+echo "Installing Claude skill dependencies..."
+# PDF processing (for pdf skill)
+uv add pypdf reportlab pdf2image pillow
+
+# Mistral OCR (for mistral-pdf-to-markdown skill)
+uv add mistralai
+
+# Zotero integration (for zotero-paper-reader skill)
+uv add python-dotenv zotero-mcp
+
+# Sync to ensure everything is installed
 uv sync
+
+echo "All dependencies installed"
+
+# Create .venv symlink to the actual virtual environment location
+echo "Creating .venv symlink..."
+if [ ! -e ".venv" ]; then
+    ln -s "$HOME/.venvs/$(basename "$PWD")" .venv
+    echo "Created .venv -> $HOME/.venvs/$(basename "$PWD") symlink"
+else
+    echo ".venv already exists, skipping"
+fi
 
 # Create softlinks from ../ProjectExample-Share/ to current directory
 echo "Creating softlinks..."
@@ -53,25 +95,6 @@ else
         fi
     done
 fi
-
-# Create VS Code settings directory and configuration
-echo "Setting up VS Code configuration..."
-mkdir -p .vscode
-
-# Create VS Code settings.json with proper Python interpreter path
-cat > .vscode/settings.json << VSCODE_EOF
-{
-    "python.defaultInterpreterPath": "\${env:HOME}/.venvs/\${workspaceFolderBasename}/bin/python",
-    "terminal.integrated.env.osx": {
-        "UV_PROJECT_ENVIRONMENT": "\${env:HOME}/.venvs/\${workspaceFolderBasename}"
-    },
-    "python.analysis.extraPaths": [
-        "\${env:HOME}/.venvs/\${workspaceFolderBasename}/lib/python*/site-packages"
-    ]
-}
-VSCODE_EOF
-
-echo "VS Code settings configured at .vscode/settings.json"
 
 # Initialize git repository if not already initialized
 if [ ! -d .git ]; then

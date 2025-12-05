@@ -4,24 +4,35 @@ A project setup and workflow designed for academic research collaboration, cente
 
 **Key Features:**
 - Git repo + Dropbox share, symlinked into one folder
-- Git-centric: A **must** to use AI, because AI messes up things. 
+- Git-centric: A **must** to use AI, because AI messes up things
 - Compatible with traditional workflows and no-Git coauthors
-- AI-friendly setup with included default instructions for LLM
+- Fine-tuned skills, MCPs, and agents useful for academic research
 
 See `ProjectExample/` for structure reference and [Setup](#automated-setup) for automated setup.
 
 ## Table of Contents
 
-- [Project Organization](#project-organization)
+- [Academic Research Project Template](#academic-research-project-template)
+  - [Table of Contents](#table-of-contents)
+  - [Project Organization](#project-organization)
     - [Core Structure](#core-structure)
-- [Prerequisites and Setup](#prerequisites-and-setup)
-- [Git](#git)
+      - [In the Git Repo (`MyProject`)](#in-the-git-repo-myproject)
+      - [In the Dropbox (`MyProject-Share`)](#in-the-dropbox-myproject-share)
+  - [Automated Setup](#automated-setup)
+  - [Git](#git)
     - [Commit](#commit)
-    - [Best Practices](#best-practices-on-commits)
+    - [Best Practices](#best-practices)
+    - [What (not) to commit](#what-not-to-commit)
+      - [Never commit:](#never-commit)
+      - [Figures and outputs](#figures-and-outputs)
+      - [Jupyter notebooks](#jupyter-notebooks)
     - [GitHub Pull-Request Workflow](#github-pull-request-workflow)
-- [AI Instructions](#ai-instructions)
-- [Python Environment Management](#python-environment-management)
-  - [Virtual Environment Location](#virtual-environment-location)
+  - [AI Instructions](#ai-instructions)
+    - [Claude Agents](#claude-agents)
+    - [Claude Skills](#claude-skills)
+    - [MCP Servers](#mcp-servers)
+  - [Python Environment Management](#python-environment-management)
+    - [Virtual Environment Location](#virtual-environment-location)
 
 
 ## Project Organization
@@ -177,7 +188,7 @@ A typical PR workflow works as follows. The introduction here uses terminal comm
 
 ## AI Instructions
 
-Projects include `CLAUDE.md` with the following AI coding principles:
+Projects include `CLAUDE.md` and `AGENTS.md` (symlink for Codex compatibility) with AI coding principles:
 
 - Write concise research code (not production-ready)
 - Use interactive, line-by-line evaluation
@@ -185,25 +196,62 @@ Projects include `CLAUDE.md` with the following AI coding principles:
 - Edit existing files instead of creating new ones
 - Execute from project root
 
+### Claude Agents
+
+The template includes specialized Claude agents in `.claude/agents/`:
+
+- **`code-reviewer`** - Reviews code changes for academic research quality, style consistency, and potential issues
+- **`report-checker`** - Validates research reports and documentation for completeness and accuracy
+- **`results-summarizer`** - Creates comprehensive summaries of analysis results after outputs have been generated
+
+**Usage**: Agents are invoked automatically by Claude Code when appropriate, or can be requested explicitly.
+
+### Claude Skills
+
+The template includes specialized Claude skills in `.claude/skills/`:
+
+- **`pdf`** - PDF processing toolkit for extracting text/tables, creating PDFs, merging/splitting documents, and handling fillable forms
+- **`mistral-pdf-to-markdown`** - Convert PDFs (including scanned documents) to Markdown using Mistral OCR API with image extraction
+- **`zotero-paper-reader`** - Read and analyze academic papers directly from your Zotero library, with automatic PDF-to-Markdown conversion
+- **`work-summary`** - Create factual working journal entries in `Notes/WorkingJournal/` after completing analysis work
+
+**Usage**: Skills are automatically available in Claude Code. Example: "Use the zotero-paper-reader skill to read the paper about liquidity from my library"
+
+### MCP Servers
+
+The template configures Model Context Protocol (MCP) servers in `.mcp.json`:
+
+- **[Zotero MCP](https://github.com/54yyyu/zotero-mcp)** - Direct integration with your Zotero library for searching papers, retrieving metadata, and downloading PDFs
+
+**Configuration**:
+1. Edit `Notes/.env` and fill in your API keys:
+   - `mistral_api_key` - Mistral API key for PDF OCR ([get key](https://console.mistral.ai/api-keys/))
+   - `ZOTERO_API_KEY` - Zotero API key ([get key](https://www.zotero.org/settings/keys/new))
+   - `ZOTERO_LIBRARY_TYPE` - "user" or "group"
+   - `ZOTERO_LIBRARY_ID` - Your library ID (leave empty for user library)
+   - `ZOTERO_LOCAL` - "false" for web API (default), "true" for local Zotero installation
+2. Customize `.mcp.json` if needed (all env vars are read from `Notes/.env`)
+
+**Note**: `Notes/.env` is in the shared folder (not tracked by Git), so your API keys are never committed to version control
+
 ## Python Environment Management
 
 The project uses [`uv`](https://docs.astral.sh/uv/) for Python environment management, which is installed by the setup script.
 
+**Packages installed by default:**
+- **Data analysis**: jupyter, pandas, matplotlib, polars, pyarrow
+- **Claude skills**: pypdf, reportlab, pdf2image, pillow, mistralai, python-dotenv, zotero-mcp
+
 **Quick uv commands:**
 - `uv sync` - Install all required dependencies from `pyproject.toml`
 - `uv run <command>` - Run any command with project environment (e.g., `uv run python script.py`, `uv run jupyter notebook`, `uv run pytest`)
-- `uv add package` - Add a new dependency for this package. Instead of using `pip`, this is the more robust way to make sure the dependencies are shared. 
+- `uv add package` - Add a new dependency. Instead of using `pip`, this is the more robust way to ensure dependencies are shared across the team.
 - `uv remove package` - Remove a dependency
 
 ### Virtual Environment Location
 
 The setup script configures `uv` to place virtual environments in `~/.venvs/MyProject` rather than within the project folder. This keeps the project directory clean and ensures consistent environment paths across different machines.
 
-**A more technical note**: The rationale for putting the `.venvs` folder outside of the project folder is that more often than not, the project folder is also synced via Dropbox across different machines. `uv` uses hard-link/clone for the Python environment, which will be broken by Dropbox sync. This will result in multiple copies of the same package across different projects, which is highly space inefficient. Moving it out of Dropbox solves this issue. 
+**Technical note**: The rationale for putting the `.venvs` folder outside of the project folder is that project folders are often synced via Dropbox across different machines. `uv` uses hard-link/clone for the Python environment, which will be broken by Dropbox sync, resulting in multiple copies of the same package across different projects (highly space inefficient). Moving it out of Dropbox solves this issue.
 
-To automatically use the right virtual environment, the setup script automatically creates `.vscode/settings.json` with:
-- `python.defaultInterpreterPath` - Points to the correct Python interpreter in the virtual environment
-- `terminal.integrated.env.osx` - Sets `UV_PROJECT_ENVIRONMENT` for proper `uv` integration
-- `python.analysis.extraPaths` - Ensures VS Code can find installed packages for IntelliSense
-
-VSCode automatically configured to use the correct environment. 
+The setup script creates a `.venv` symlink in your project pointing to `~/.venvs/MyProject`. VS Code and other tools automatically detect this symlink and use the correct environment—no manual configuration needed. 

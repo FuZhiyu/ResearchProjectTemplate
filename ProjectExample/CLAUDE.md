@@ -66,3 +66,13 @@ Within each Output subfolder, optionally organize by script name:
 - Add dependencies with `uv add package`
 
 Whenever calling Python-related programs, use `uv` unless it is infeasible.
+
+## For Codex Only
+
+### Skills available
+
+- `mistral-pdf-to-markdown`: Convert PDFs to Markdown with Mistral OCR, including image extraction (`.claude/skills/mistral-pdf-to-markdown`).
+- `pdf`: Comprehensive toolkit for programmatic PDF extraction, creation, merging, and form handling (`.claude/skills/pdf`).
+- `work-summary`: Generate factual working journal entries in `Notes/WorkingJournal/` once analysis is done (`.claude/skills/work-summary`).
+
+Use these skills whenever the user requests the corresponding workflow; refer to each `SKILL.md` for command details.

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__zotero__zotero_search_items",
+      "mcp__zotero__zotero_get_item_children",
+      "mcp__zotero__zotero_get_item_fulltext",
+      "mcp__zotero__zotero_get_item_metadata",
+      "WebSearch",
+      "Skill(pdf-to-markdown)",
+      "Skill(pdf)",
+      "Skill(mistral-pdf-to-markdown)",
+      "Skill(example-skills:skill-creator)",
+      "mcp__zotero__zotero_get_recent",
+      "Skill(zotero-paper-reader)",
+      "mcp__zotero__zotero_semantic_search"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "zotero"
+  ]
+}

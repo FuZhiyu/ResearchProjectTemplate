@@ -1,9 +1,0 @@
-{
-    "python.defaultInterpreterPath": "${env:HOME}/.venvs/${workspaceFolderBasename}/bin/python",
-    "terminal.integrated.env.osx": {
-        "UV_PROJECT_ENVIRONMENT": "${env:HOME}/.venvs/${workspaceFolderBasename}"
-    },
-    "python.analysis.extraPaths": [
-        "${env:HOME}/.venvs/${workspaceFolderBasename}/lib/python*/site-packages"
-    ]
-}

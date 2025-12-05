@@ -3,5 +3,15 @@ name = "projectexample"
 version = "0.1.0"
 description = "Academic research project: ProjectExample"
 readme = "README.md"
-requires-python = ">=3.9"
-dependencies = []
+requires-python = ">=3.12"
+dependencies = [
+    # Packages installed automatically during setup:
+    # - Data analysis: jupyter, pandas, matplotlib, polars, pyarrow
+    # - Claude skills: pypdf, reportlab, pdf2image, pillow, mistralai, python-dotenv, zotero-mcp
+    #
+    # Add more as needed: uv add <package>
+]
+
+[tool.uv.sources]
+# Uncomment and configure as needed:
+# zotero-mcp = { git = "https://github.com/54yyyu/zotero-mcp.git" }
