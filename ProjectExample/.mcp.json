@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "zotero": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--env-file",
+        "Notes/.env",
+        "zotero-mcp",
+        "serve"
+      ]
+    }
+  }
+}
